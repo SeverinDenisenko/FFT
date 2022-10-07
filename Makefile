@@ -4,7 +4,7 @@ CMP=g++-11
 CMP_KEYS=-Wall -Wextra -Wfloat-equal -Wundef -Wcast-align -Wwrite-strings -Wlogical-op -Wmissing-declarations -Wredundant-decls -Wshadow -Woverloaded-virtual -pedantic
 
 plot: run
-	#gnuplot plot.plt
+	gnuplot plot.plt
 
 run: build $(wildcard data.dat)
 	./fft
