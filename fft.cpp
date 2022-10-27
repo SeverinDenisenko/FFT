@@ -3,12 +3,11 @@
 //
 
 #include "fft.h"
+#include <iostream>
 
 std::complex<double> W(uint32_t q, uint32_t p, int8_t sign);
 
-void iter_dft(std::vector<std::complex<double>> &input,
-         std::vector<std::complex<double>> &result,
-         bool forward)
+void iter_dft(const std::vector<std::complex<double>> &input, std::vector<std::complex<double>> &result, bool forward)
 {
     uint32_t N = input.size();
     int8_t sign = forward ? -1 : 1;
@@ -17,7 +16,7 @@ void iter_dft(std::vector<std::complex<double>> &input,
     {
         for (uint32_t n = 0; n < N; ++n)
         {
-            result[k] += input[n] * W(n * k, N, sign);
+            result.at(k) += input.at(n) * W(n * k, N, sign);
         }
     }
 }
@@ -38,8 +37,8 @@ void rec_fft(std::vector<std::complex<double>> &input, std::vector<std::complex<
     std::vector<std::complex<double>> odd_result(n/2);
 
     for (uint32_t i = 0; 2 * i < n; i++) {
-        even_input[i] = input[2 * i];
-        odd_input[i] = input[2 * i + 1];
+        even_input.at(i) = input.at(2 * i);
+        odd_input.at(i) = input.at(2 * i + 1);
     }
 
     rec_fft(even_input, even_result, forward);
@@ -47,14 +46,14 @@ void rec_fft(std::vector<std::complex<double>> &input, std::vector<std::complex<
 
     for (uint32_t i = 0; 2 * i < n; ++i)
     {
-        result[2 * i] = even_result[i];
-        result[2 * i + 1] = odd_result[i];
+        result.at(2 * i) = even_result.at(i);
+        result.at(2 * i + 1) = odd_result.at(i);
     }
 
     for (uint32_t i = 0; 2 * i < n; ++i)
     {
-        result[i] = even_result[i] + odd_result[i] * W(i, n, forward? -1: 1);
-        result[i + n/2] = even_result[i] + odd_result[i] * W(i + n/2, n, forward? -1: 1);
+        result.at(i) = even_result.at(i) + odd_result.at(i) * W(i, n, forward? -1: 1);
+        result.at(i + n/2) = even_result.at(i) + odd_result.at(i) * W(i + n/2, n, forward? -1: 1);
     }
 }
 
@@ -72,12 +71,12 @@ void fft(std::vector<std::complex<double>> &input,
 
     for (uint32_t i = 0; i < n; ++i)
     {
-        result[i] *= n_inverse_sqrt;
+        result.at(i) *= n_inverse_sqrt;
     }
 
     for (uint32_t i = 0; i < n; ++i)
     {
-        mods[i] = std::abs(result[i]);
+        mods.at(i) = std::abs(result.at(i));
     }
 }
 
@@ -97,18 +96,18 @@ void dft(std::vector<std::complex<double>> &input,
     {
         for (uint32_t n = 0; n < N; ++n)
         {
-            output[k] += input[n] * W(n * k, N, sign);
+            output.at(k) += input.at(n) * W(n * k, N, sign);
         }
     }
 
     for (uint32_t i = 0; i < N; ++i)
     {
-        output[i] *= N_inverse_sqrt;
+        output.at(i) *= N_inverse_sqrt;
     }
 
     for (uint32_t i = 0; i < N; ++i)
     {
-        mods[i] = std::abs(output[i]);
+        mods.at(i) = std::abs(output.at(i));
     }
 }
 

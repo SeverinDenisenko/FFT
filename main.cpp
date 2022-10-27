@@ -19,7 +19,7 @@ int main()
     {
         double a, b;
         input_file >> a >> b;
-        input.emplace_back(a, b);
+        input.at(i) = std::complex<double>(a, b);
     }
 
     std::vector<std::complex<double>> result = std::vector<std::complex<double>>(N);
